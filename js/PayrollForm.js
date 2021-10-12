@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded',(event) => {
 });
 
 
-const save = (event) => {
+const save = () => {
   let employeePayrollData;
   try {
       employeePayrollData = createEmployeePayroll();
@@ -48,6 +48,12 @@ const save = (event) => {
 
 const createEmployeePayroll = () => {
   let employeePayrollData = new EmployeePayrollData();
+  try {
+    employeePayrollData.name = getInputValueById('#name');
+  } catch (e) {
+    setTextValue('.text-error',e);
+    throw e;
+  }
   employeePayrollData.name = getInputValueById('#name');
   employeePayrollData.profile = getSelectedValues('[name=profile]').pop();
   employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
@@ -57,7 +63,13 @@ const createEmployeePayroll = () => {
   let year = getInputValueById('#year');
   let month = getInputValueById('#month') - 1;
   let day = getInputValueById('#day');
-  employeePayrollData.startDate = new Date(year, month, day);
+  try {
+    employeePayrollData.startDate = new Date(year, month, day);
+  } catch (error) {
+    setTextValue('.date-error',e);
+    throw e;
+  }
+  
   console.log(employeePayrollData.toString());
 
   alert(employeePayrollData.toString());
