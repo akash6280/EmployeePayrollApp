@@ -131,6 +131,11 @@ body {
     letter-spacing: 0px;
     color: #42515f;
     background-color: transparent;
+    width: 120px;
+    margin-top: 15px;
+    margin-right: 1em;
+    margin-bottom: 1em;
+
   }
 
   .button-content {
@@ -184,6 +189,13 @@ body {
     color:#42515f;
   }
 
+
+  error-output {
+    margin-left: 10px;
+    font-size : 12px;
+    font-style: italic;
+    color: red;
+  } 
 
 
 
