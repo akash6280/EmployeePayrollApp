@@ -19,6 +19,21 @@ window.addEventListener('DOMContentLoaded',(event) => {
   salary.addEventListener("input", function () {
     output.textContent = salary.value;
   });
+
+  const dateError = document.querySelector('.date-error');
+  const day  = document.querySelector('#day');
+  const month  = document.querySelector('#month');
+  const year  = document.querySelector('#year');
+  const startDate = document.querySelector('.startDate');
+  startDate.addEventListener('input', function(){
+      let date=new Date(year.value, month.value-1, day.value);
+      try{
+          (new EmployeePayrollData()).startDate = date;
+          dateError.textContent = "";
+      } catch(e) {
+      dateError.textContent = e;
+    }
+  });
 });
 
 
@@ -40,7 +55,7 @@ const createEmployeePayroll = () => {
   employeePayrollData.salary = getInputValueById('#salary');
   employeePayrollData.notes = getInputValueById('#notes');
   let year = getInputValueById('#year');
-  let month = parseInt(getInputValueById('#month')) - 1;
+  let month = getInputValueById('#month') - 1;
   let day = getInputValueById('#day');
   employeePayrollData.startDate = new Date(year, month, day);
   console.log(employeePayrollData.toString());
