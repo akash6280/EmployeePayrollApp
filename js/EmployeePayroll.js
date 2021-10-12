@@ -20,7 +20,6 @@ class EmployeePayrollData
             this._name = name;
         }
         else{
-            alert("Invalid name");
             throw 'Invalid Name';
         }
     }
@@ -68,7 +67,6 @@ class EmployeePayrollData
             this._startDate = startDate;
         }
         else {
-            alert("Invalid date")
             throw 'Invalid date';
         }
     }
