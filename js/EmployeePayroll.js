@@ -15,7 +15,14 @@ class EmployeePayrollData
     }
 
     set name(name) {
-        this._name = name
+        let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
+        if (nameRegex.test(name)){
+            this._name = name;
+        }
+        else{
+            alert("Invalid name");
+            throw 'Invalid Name';
+        }
     }
 
     get profile() {
@@ -56,7 +63,14 @@ class EmployeePayrollData
     }
 
     set startDate(startDate) {
-          this._startDate = startDate;
+        alert(startDate);
+        if (startDate <= new Date() && Date.now()-startDate < 30*24*60*60*1000){
+            this._startDate = startDate;
+        }
+        else {
+            alert("Invalid date")
+            throw 'Invalid date';
+        }
     }
 
     get notes() {
