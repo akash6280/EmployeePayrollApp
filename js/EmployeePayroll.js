@@ -62,7 +62,6 @@ class EmployeePayrollData
     }
 
     set startDate(startDate) {
-        alert(startDate);
         if (startDate <= new Date() && Date.now()-startDate < 30*24*60*60*1000){
             this._startDate = startDate;
         }
