@@ -1,4 +1,6 @@
 window.addEventListener('DOMContentLoaded',(event) => {
+  
+
   const name = document.querySelector('#name');
   const textError = document.querySelector('.text-error');
   name.addEventListener('input',function(){
@@ -54,7 +56,6 @@ function createAndUpdateStorage(employeePayrollData){
   }else{
       employeePayrollList = [employeePayrollData]
   }
-  alert(employeePayrollList.toString());
   localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
 }
 
@@ -66,6 +67,7 @@ const createEmployeePayroll = () => {
     setTextValue('.text-error',e);
     throw e;
   }
+  employeePayrollData.id = new Date().getTime();
   employeePayrollData.name = getInputValueById('#name');
   employeePayrollData.profile = getSelectedValues('[name=profile]').pop();
   employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
