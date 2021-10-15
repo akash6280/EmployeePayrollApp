@@ -1,5 +1,4 @@
 let employeePayrollList;
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 window.addEventListener("DOMContentLoaded", (event) => {
     employeePayrollList = getEmployeePayrollDataFromStorage();
     document.querySelector(".emp-count").textContent = employeePayrollList.length;
@@ -25,51 +24,23 @@ const createInnerHtml = () => {
                         </tr>`;
     let innerHtml=`${headerHtml}`;
     for(const employeePayrollData of employeePayrollList){   
-        let date=new Date(employeePayrollData._startDate); 
-        date=date.getDate() + " " + months[(date.getMonth() + 1)] + " " + date.getFullYear()   
         innerHtml = `${innerHtml}
                         <tr>
-                            <td><img class="profile" alt="" src="${employeePayrollData._profile}"></td>
+                            <td><img class="profile" alt="profile picture" src="${employeePayrollData._profile}"></td>
                             <td>${employeePayrollData._name}</td>
                             <td>${employeePayrollData._gender}</td>
                             <td>${getDeptHtml(employeePayrollData._department)}
                             </td>
                             <td>${employeePayrollData._salary}</td>
-                            <td>${date}</td>
+                            <td>${stringifyDate(employeePayrollData._startDate)}</td>
                             <td>
-                                <img id="1" onclick="remove(this)" alt="delete" src="../assets/icons/delete-black-18dp.svg">
-                                <img id="1" onclick="update(this)" alt="edit" src="../assets/icons/create-black-18dp.svg">
+                                <img id="${employeePayrollData._id}" onclick="remove(this)" alt="delete" src="../assets/icons/delete-black-18dp.svg">
+                                <img id="${employeePayrollData._id}" onclick="update(this)" alt="edit" src="../assets/icons/create-black-18dp.svg">
                             </td>
                         </tr>
                       `;
     }
     document.querySelector("#table-display").innerHTML = innerHtml;
-};
-
-const createEmployeePayrollJSON = () => {
-    let employeePayrollListLocal = [
-        {
-            _name: "Kobe",
-            _gender: "Male",
-            _department: ["Finance", "Engineering"],
-            _salary: "500000",
-            _startDate: "29 Oct 2019",
-            _note: "",
-            _id: new Date().getTime(),
-            _profile: "../assets/profile-images/Ellipse -2.png",
-        },
-        {
-            _name: "Amarpa",
-            _gender: "Female",
-            _department: ["Sales"],
-            _salary: "510000",
-            _startDate: "1 Dec 2020",
-            _note: "",
-            _id: new Date().getTime() + 1,
-            _profile: "../assets/profile-images/Ellipse -1.png",
-        },
-    ];
-    return employeePayrollListLocal;
 };
 
 const getDeptHtml = (deptList) => {
@@ -79,3 +50,15 @@ const getDeptHtml = (deptList) => {
     }
     return deptHtml;
 };
+
+const remove = (node) => {
+    let employeePayrollData = employeePayrollList.find(empData => empData._id == node.id);
+    if(!employeePayrollData) return;
+    const index = employeePayrollList
+                 .map(empData => empData._id)
+                 .indexOf(employeePayrollData._id);
+    employeePayrollList.splice(index, 1);
+    localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
+    createInnerHtml();
+} 
