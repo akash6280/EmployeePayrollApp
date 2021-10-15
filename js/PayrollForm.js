@@ -46,15 +46,30 @@ window.addEventListener('DOMContentLoaded',(event) => {
   checkForUpdate();
 });
 
-
-const save = () => {
-  let employeePayrollData;
-  try {
-      employeePayrollData = createEmployeePayroll();
-      createAndUpdateStorage(employeePayrollData);
-  } catch (e) {
-      return;
+const save = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  try{
+      setEmployeePayrollObject();
+      createAndUpdateStorage();
+      resetForm();
+      window.location.replace(site_properties.home_page);
   }
+  catch(e){
+    return;
+  }
+}
+
+const setEmployeePayrollObject = () => {
+  employeePayrollObj._name = getInputValueById('#name');
+  employeePayrollObj._profilePic = getSelectedValues('[name=profile]').pop();
+  employeePayrollObj._gender = getSelectedValues('[name=gender]').pop();
+  employeePayrollObj._departments = getSelectedValues('[name=department]');
+  employeePayrollObj._salary =  getInputValueById('#salary');
+  employeePayrollObj._notes = getInputValueById('#notes');
+  let date = getInputValueById('#day')+ " "+ getInputValueById('#month')+" "+getInputValueById('#year');
+  employeePayrollObj._startDate = date;
+  console.log(employeePayrollObj);
 }
 
 function createAndUpdateStorage(employeePayrollData){
