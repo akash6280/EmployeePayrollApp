@@ -62,9 +62,9 @@ const save = (event) => {
 
 const setEmployeePayrollObject = () => {
   employeePayrollObj._name = getInputValueById('#name');
-  employeePayrollObj._profilePic = getSelectedValues('[name=profile]').pop();
+  employeePayrollObj._profile = getSelectedValues('[name=profile]').pop();
   employeePayrollObj._gender = getSelectedValues('[name=gender]').pop();
-  employeePayrollObj._departments = getSelectedValues('[name=department]');
+  employeePayrollObj._department = getSelectedValues('[name=department]');
   employeePayrollObj._salary =  getInputValueById('#salary');
   employeePayrollObj._notes = getInputValueById('#notes');
   let date = getInputValueById('#day')+ " "+ getInputValueById('#month')+" "+getInputValueById('#year');
@@ -72,43 +72,60 @@ const setEmployeePayrollObject = () => {
   console.log(employeePayrollObj);
 }
 
-function createAndUpdateStorage(employeePayrollData){
+function createAndUpdateStorage(){
   let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-  if(employeePayrollList != undefined){
-      employeePayrollList.push(employeePayrollData);
-  }else{
-      employeePayrollList = [employeePayrollData]
+  if(employeePayrollList){
+    let empPayrollData = employeePayrollList.find(empData => empData._id == employeePayrollObj._id);
+    if(!empPayrollData) {
+      employeePayrollList.push(createEmployeePayrollData());
+    }
+    else {
+      const index = employeePayrollList.map(empData => empData._id)
+                                       .indexOf(empPayrollData._id);
+      employeePayrollList.splice(index, 1, createEmployeePayrollData(empPayrollData._id));
+    }
+  }
+  else{ employeePayrollList = [createEmployeePayrollData()];
   }
   localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
 }
 
-const createEmployeePayroll = () => {
+const createEmployeePayrollData = (id) => {
   let employeePayrollData = new EmployeePayrollData();
-  try {
-    employeePayrollData.name = getInputValueById('#name');
-  } catch (e) {
-    setTextValue('.text-error',e);
-    throw e;
-  }
-  employeePayrollData.id = new Date().getTime();
-  employeePayrollData.name = getInputValueById('#name');
-  employeePayrollData.profile = getSelectedValues('[name=profile]').pop();
-  employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
-  employeePayrollData.department = getSelectedValues('[name=department]');
-  employeePayrollData.salary = getInputValueById('#salary');
-  employeePayrollData.notes = getInputValueById('#notes');
-  let date = getInputValueById('#day')+ " "+ getInputValueById('#month')+" "+getInputValueById('#year');
-  try {
-    employeePayrollData.startDate = new Date();
-  } catch (error) {
-    setTextValue('.date-error',e);
-    throw e;
-  }
-  
-  console.log(employeePayrollData.toString());
-
-  alert(employeePayrollData.toString());
+  if (!id) employeePayrollData.id = createNewEmployeeId();
+  else employeePayrollData.id = id;
+  setEmployeePayrollData(employeePayrollData);
   return employeePayrollData;
+}
+
+const setEmployeePayrollData = (employeePayrollData) => {
+  try{
+      employeePayrollData.name = employeePayrollObj._name;
+  }
+  catch (e) {
+      setTextValue('.text-error',e);
+      throw e;
+  }
+  employeePayrollData.profile = employeePayrollObj._profile;
+  employeePayrollData.gender = employeePayrollObj._gender;
+  employeePayrollData.department = employeePayrollObj._department;
+  employeePayrollData.salary = employeePayrollObj._salary;
+  employeePayrollData.notes = employeePayrollObj._notes;
+  try {
+      employeePayrollData.startDate = new Date(Date.parse(employeePayrollObj._startDate));
+  }   
+  catch(e){
+      setTextValue('.date-error',e);
+      throw e;
+  }
+  alert(employeePayrollData.toString());
+}
+
+const createNewEmployeeId = () => {
+  let empID = localStorage.getItem("EmployeeId");
+  empID = !empID ? 1 : (parseInt(empID)+1).toString();
+  localStorage.setItem("EmployeeId",empID);
+  return empID;
 }
 
 const getInputValueById = (id) => {
@@ -131,7 +148,7 @@ const resetForm = () => {
   unsetSelectedValues('[name=profile]');
   unsetSelectedValues('[name=gender]');
   unsetSelectedValues('[name=department]');
-  setValue('#salary','');
+  setValue('#salary','40000');
   setTextValue('.salary-output','40000');
   setValue('#notes','');
   setSelectedIndex('#day',0);
