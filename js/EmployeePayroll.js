@@ -62,12 +62,11 @@ class EmployeePayrollData
     }
 
     set startDate(startDate) {
-        if (startDate <= new Date() && Date.now()-startDate < 30*24*60*60*1000){
-            this._startDate = startDate;
-        }
-        else {
-            throw 'Invalid date';
-        }
+        if(startDate > new Date())
+        throw 'Start Date can not be a future date';
+        if( Date.now()-startDate >30*24*60*60*1000)
+        throw 'Start Date is beyond 30 days';
+        this._startDate = startDate;
     }
 
     get notes() {
